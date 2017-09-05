@@ -1,0 +1,32 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+    -fx-background-color: #CCCCCC;
+}
+
+.updateButton{
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#2f4656, #285c82);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+.button{
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#2f4656, #285c82);
+    -fx-effect: dropshadow( two-pass-box , rgba(0,0,0,0.2) , 2, 0.0 , 0 , 1 );
+    -fx-border-radius: 4px;
+}
+
+.button:hover{
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#285c82, #2f4656);
+    -fx-effect: dropshadow( two-pass-box , rgba(0,0,0,0.2) , 2, 0.0 , 0 , 1 );
+    -fx-border-radius: 4px;
+}
