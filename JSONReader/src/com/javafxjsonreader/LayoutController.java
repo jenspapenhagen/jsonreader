@@ -114,7 +114,7 @@ public class LayoutController implements Initializable {
 
     }
 
-    public void fillUIformJSON(boolean online) throws Exception {
+    private void fillUIformJSON(boolean online) throws Exception {
         //get the new Feed
         ObservableList<Feed> liste = convertFeed(getFeed(online));
 
@@ -217,7 +217,7 @@ public class LayoutController implements Initializable {
      * @return the new build String
      * @throws Exception
      */
-    public String buildingUpCSVString() throws Exception {
+    private String buildingUpCSVString() throws Exception {
         boolean online = false;
         //empty string
         String alltogether = "";

@@ -148,7 +148,7 @@ public class DialogController implements Initializable {
      * @return
      * @throws Exception 
      */
-    public List<Status> fillUIformJSON() throws Exception {
+    private List<Status> fillUIformJSON() throws Exception {
         //make a statuslist
         List<Status> statusliste = null;
         //give the URL
@@ -250,7 +250,7 @@ public class DialogController implements Initializable {
      * @return the new build String
      * @throws Exception
      */
-    public String buildingUpCSVString() throws Exception {
+    private String buildingUpCSVString() throws Exception {
         //empty string
         String alltogether = "";
         //the header of the CSV file

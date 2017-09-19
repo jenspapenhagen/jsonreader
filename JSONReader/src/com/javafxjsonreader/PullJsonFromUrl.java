@@ -27,9 +27,14 @@ import org.slf4j.LoggerFactory;
 public final class PullJsonFromUrl {
 
     private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(PullJsonFromUrl.class);
-    private static String singelparkinglotfile = "./src/com/javafxjsonreader/resources/singelparkinglot.txt";
-    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt";
+//    private static String singelparkinglotfile = "./src/com/javafxjsonreader/resources/singelparkinglot.txt";
+//    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt";
 
+    private static String singelparkinglotfile = "resources/singelparkinglot.txt";
+    private static String overviewfile = "resources/overview.txt";
+
+    private ClassLoader classLoader = getClass().getClassLoader();
+    
     public static TableColumn<Integer, Number> intColumn;
     public static TableColumn<Integer, String> appelationColumn;
     public static List<String> nameColumn = Arrays.asList();
@@ -66,7 +71,8 @@ public final class PullJsonFromUrl {
         writeToSingelParklotFile(DownloadedFile);
 
         //read the singelparkinglotfile and giveback as String
-        String output = FileHandler.readFile(singelparkinglotfile);
+        
+        String output = FileHandler.readFile(classLoader.getResource(singelparkinglotfile).getFile());
 
         return output;
     }
@@ -84,14 +90,15 @@ public final class PullJsonFromUrl {
             String DownloadedFile = readUrl("http://report.pundr.hamburg/rest/carpark/");
             writeToOverviewFile(DownloadedFile);
         }
-        //read from the overview file and giveback as String
-        String output = FileHandler.readFile(overviewfile);
+        //read from the overview file and giveback as String        
+        String output = FileHandler.readFile(classLoader.getResource(overviewfile).getFile());
 
         return output;
     }
 
     /**
      * read the JSON file from given URL
+     * this methode is set public for the test
      *
      * @param urlString
      * @return
@@ -138,10 +145,10 @@ public final class PullJsonFromUrl {
      *
      * @param input
      */
-    private static void writeToOverviewFile(String input) {
+    private void writeToOverviewFile(String input) {
         try {
-            FileHandler.cleanFile(overviewfile);
-            FileHandler.writeToFile(input, overviewfile);
+            FileHandler.cleanFile(classLoader.getResource(overviewfile).getFile());
+            FileHandler.writeToFile(input, classLoader.getResource(overviewfile).getFile());
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());
         }
@@ -153,10 +160,10 @@ public final class PullJsonFromUrl {
      *
      * @param input
      */
-    private static void writeToSingelParklotFile(String input) {
+    private void writeToSingelParklotFile(String input) {
         try {
-            FileHandler.cleanFile(singelparkinglotfile);
-            FileHandler.writeToFile(input, singelparkinglotfile);
+            FileHandler.cleanFile(classLoader.getResource(singelparkinglotfile).getFile());
+            FileHandler.writeToFile(input, classLoader.getResource(singelparkinglotfile).getFile());
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());
         }
