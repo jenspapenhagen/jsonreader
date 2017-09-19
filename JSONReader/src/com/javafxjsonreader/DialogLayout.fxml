@@ -15,16 +15,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="AnchorPane" prefHeight="403.0" prefWidth="693.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafxjsonreader.DialogController">
+<AnchorPane id="AnchorPane" fx:id="AnchorPane" prefHeight="370.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafxjsonreader.DialogController">
     <stylesheets>
         <URL value="@styles/layout.css" />
     </stylesheets>
     <children>
-        <VBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="383.0" prefWidth="683.0">
+        <VBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="383.0" prefWidth="683.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <HBox>
+                <HBox VBox.vgrow="ALWAYS">
                     <children>
-                        <Label text="ID: ">
+                        <Label prefHeight="17.0" prefWidth="33.0" text="ID: ">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
@@ -37,45 +37,55 @@
                                 <Insets left="5.0" right="5.0" />
                             </opaqueInsets>
                         </TextField>
-                        <Label text="Datum von">
-                            <HBox.margin>
-                                <Insets right="5.0" />
-                            </HBox.margin>
-                            <font>
-                                <Font name="System Bold" size="12.0" />
-                            </font>
-                            <opaqueInsets>
-                                <Insets left="3.0" />
-                            </opaqueInsets>
-                            <padding>
-                                <Insets left="5.0" />
-                            </padding>
-                        </Label>
-                        <JFXDatePicker fx:id="dateA" defaultColor="#285c82" />
-                        <JFXTimePicker fx:id="timeA" defaultColor="#285c82" />
+                  <Region prefHeight="58.0" prefWidth="43.0" HBox.hgrow="ALWAYS" />
+                  <VBox prefHeight="58.0" prefWidth="514.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                    <Label prefHeight="20.0" prefWidth="30.0" text="von">
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
+                                        <font>
+                                            <Font name="System Bold" size="12.0" />
+                                        </font>
+                                        <opaqueInsets>
+                                            <Insets left="3.0" />
+                                        </opaqueInsets>
+                                        <padding>
+                                            <Insets left="5.0" />
+                                        </padding>
+                                    </Label>
+                                    <JFXDatePicker fx:id="dateA" defaultColor="#285c82" />
+                                    <JFXTimePicker fx:id="timeA" defaultColor="#285c82" />
+                           </children>
+                        </HBox>
+                            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="630.0">
+                                <children>
+                                    <Label alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="30.0" text="bis">
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
+                                        <font>
+                                            <Font name="System Bold" size="12.0" />
+                                        </font>
+                                    </Label>
+                                    <JFXDatePicker fx:id="dateE" defaultColor="#285c82" />
+                                    <JFXTimePicker fx:id="timeE" defaultColor="#285c82" />
+                                    <Button id="updateButton" fx:id="updateButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#handleUpdateButtonAction" prefHeight="25.0" prefWidth="125.0" styleClass="updateButton" text="Update List" />
+                                </children>
+                                <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                </padding>
+                            </HBox>
+                     </children>
+                  </VBox>
                     </children>
+               <VBox.margin>
+                  <Insets left="5.0" top="5.0" />
+               </VBox.margin>
                 </HBox>
-                <HBox alignment="CENTER" prefHeight="37.0" prefWidth="630.0">
-                    <children>
-                        <Region maxWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="37.0" prefWidth="234.0" HBox.hgrow="ALWAYS">
-                        </Region>
-                        <Label alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="42.0" text="bis">
-                            <HBox.margin>
-                                <Insets right="5.0" />
-                            </HBox.margin>
-                            <font>
-                                <Font name="System Bold" size="12.0" />
-                            </font>
-                        </Label>
-                        <JFXDatePicker fx:id="dateE" defaultColor="#285c82" />
-                        <JFXTimePicker fx:id="timeE" defaultColor="#285c82" />
-                        <Button id="updateButton" fx:id="updateButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleUpdateButtonAction" prefHeight="25.0" prefWidth="125.0" styleClass="updateButton" text="Update List" />
-                    </children>
-                    <padding>
-                        <Insets left="5.0" right="5.0" />
-                    </padding>
-                </HBox>
-                <TableView fx:id="table" maxWidth="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="282.0" prefWidth="605.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="table" nodeOrientation="LEFT_TO_RIGHT" prefHeight="280.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="id" prefWidth="75.0" text="id" />
                         <TableColumn fx:id="internalCarparkId" prefWidth="115.0" text="internalCarparkId" />
@@ -85,13 +95,13 @@
                         <TableColumn fx:id="reservedSlots" prefWidth="106.0" text="Belegte Plätze" />
                     </columns>
                     <VBox.margin>
-                        <Insets />
+                        <Insets top="5.0" />
                     </VBox.margin>
                     <opaqueInsets>
                         <Insets bottom="5.0" />
                     </opaqueInsets>
                 </TableView>
-                <HBox alignment="TOP_RIGHT" prefHeight="34.0" prefWidth="625.0">
+                <HBox alignment="TOP_RIGHT" prefHeight="33.0" prefWidth="695.0" VBox.vgrow="ALWAYS">
                     <children>
                         <Region prefHeight="200.0" prefWidth="25.0" />
                         <Button id="saveButton" fx:id="saveJSONButton" mnemonicParsing="false" onAction="#handleSaveButtonAction" prefHeight="25.0" prefWidth="125.0" styleClass="updateButton" text="Save as JSON File">
@@ -112,7 +122,4 @@
             </children>
         </VBox>
     </children>
-    <padding>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-    </padding>
 </AnchorPane>

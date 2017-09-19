@@ -103,7 +103,7 @@ public class DialogController implements Initializable {
         Object output = gson.toJson(newURl);
 
         if (file != null) {
-            SaveFile(output.toString(), file);
+             FileHandler.saveToFile(output.toString(), file);
         }
     }
 
@@ -123,7 +123,7 @@ public class DialogController implements Initializable {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-            SaveFile(buildingUpCSVString(), file);
+             FileHandler.saveToFile(buildingUpCSVString(), file);
         }
     }
 
@@ -135,9 +135,10 @@ public class DialogController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //set the timezone to Berlin Europa
         ZoneId zone1 = ZoneId.of("Europe/Berlin");
+        //fill with default values
         dateA.setValue(LocalDate.now(zone1));
         dateE.setValue(LocalDate.now(zone1));
-        timeA.setValue(LocalTime.now());
+        timeA.setValue(LocalTime.now().minusHours(1));
         timeE.setValue(LocalTime.now(zone1));
 
     }
@@ -152,7 +153,7 @@ public class DialogController implements Initializable {
         List<Status> statusliste = null;
         //give the URL
         PullJsonFromUrl pullJsonFromUrl = new PullJsonFromUrl(newURL());
-        String jsonFileAsString = pullJsonFromUrl.PullFromNewUrl(newURL());
+        String jsonFileAsString = pullJsonFromUrl.pullFromNewUrl(newURL());
         statusliste = pullJsonFromUrl.parseLocalStatusJsonFromFile(jsonFileAsString);
 
         //built the ObservableList for the UI
@@ -209,8 +210,8 @@ public class DialogController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 //force set the start time one hour behind now and the enddate to now, to give back some working timerange
-                timeA.setValue(LocalTime.now().minusHours(1));
-                timeE.setValue(LocalTime.now());
+                timeA.setValue(LocalTime.now().minusHours(2));
+                timeE.setValue(LocalTime.now().minusHours(1));
             }
         }
 
@@ -242,25 +243,7 @@ public class DialogController implements Initializable {
         return output;
     }
 
-    /**
-     * Save a String into a singel File
-     *
-     * @param input
-     * @param fileName
-     * @throws IOException
-     */
-    public void SaveFile(String input, File fileName) throws IOException {
-        //using the FileWriter to make a new file or handle 
-        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-            fileWriter.write(input);
-            //adding a break after the String
-            fileWriter.write(System.lineSeparator());
-            fileWriter.close();
-        } catch (IOException ex) {
-            LOG.error("FileWriter have an IOException" + ex.toString());
-        }
-    }
-
+    
     /**
      * building the a CSV ( Comma-separated values file)
      *
@@ -280,7 +263,7 @@ public class DialogController implements Initializable {
             alltogether = alltogether + bodyString + System.lineSeparator();
         }
 
-        //give back the uildup String
+        //give back the buildup String
         return alltogether;
     }
 

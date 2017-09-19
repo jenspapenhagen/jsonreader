@@ -100,7 +100,7 @@ public class LayoutController implements Initializable {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-            SaveFile(convertToCSVString(), file);
+            FileHandler.saveToFile(buildingUpCSVString(), file);
         }
     }
 
@@ -155,7 +155,7 @@ public class LayoutController implements Initializable {
                         DialogController controller = fxmlLoader.<DialogController>getController();
                         //set the InternalId form the main window to this child window
                         controller.setInID(stat.getInternalId());
-                        
+
                         //adding look of the window
                         Stage stage = new Stage();
                         stage.initModality(Modality.APPLICATION_MODAL);
@@ -163,7 +163,7 @@ public class LayoutController implements Initializable {
                         stage.setTitle("Park & Ride Parkhaus Checker: " + stat.getInternalId());
                         stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
                         stage.setResizable(true);
-                        
+
                         //show the window
                         stage.setScene(new Scene(root1));
                         stage.show();
@@ -179,16 +179,29 @@ public class LayoutController implements Initializable {
 
     }
 
+    /**
+     * getting a new overview List of all the parkinglots form old oder form
+     * uptodate file
+     *
+     * @param online
+     * @return
+     * @throws Exception
+     */
     private List<Feed> getFeed(boolean online) throws Exception {
-
         List<Feed> liste = null;
         PullJsonFromUrl pullJsonFromUrl = new PullJsonFromUrl(online);
-        String jsonFileAsString = pullJsonFromUrl.PullFromUrl(online);
+        String jsonFileAsString = pullJsonFromUrl.pullOverview(online);
         liste = new PullJsonFromUrl(online).parseLocalJsonFromFile(jsonFileAsString);
 
         return liste;
     }
 
+    /**
+     * Convert a List of Status into an ObservableList
+     *
+     * @param liste
+     * @return ObservableList
+     */
     private ObservableList<Feed> convertFeed(List<Feed> liste) {
         ObservableList<Feed> output = FXCollections.observableArrayList();
         output.addAll(liste);
@@ -197,25 +210,33 @@ public class LayoutController implements Initializable {
 
     }
 
-    public void SaveFile(String input, File fileName) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-            fileWriter.write(input);
-            fileWriter.write(System.lineSeparator());
-            fileWriter.close();
-        }
-    }
 
-    public String convertToCSVString() throws Exception {
+    /**
+     * building the a CSV ( Comma-separated values file)
+     *
+     * @return the new build String
+     * @throws Exception
+     */
+    public String buildingUpCSVString() throws Exception {
         boolean online = false;
+        //empty string
         String alltogether = "";
+        //the header of the CSV file
         String headerString = "geoId,internalId,id,zip,contactPhone,appelation,contactName,street,longitude,capacityMax,latitude,abbreviation,contactMail,city";
-        alltogether = alltogether + headerString + "\n";
+        //adding the header on top
+        alltogether = alltogether + headerString + System.lineSeparator();
+        //for every Status build a new line in the CSV and ending with a break
         for (Feed feed : getFeed(online)) {
-            String bodyString = "" + feed.getGeoId() + "," + feed.getInternalId() + "," + feed.getId() + "," + feed.getZip() + ","
-                    + feed.getContactPhone() + "," + feed.getAppelation() + "," + feed.getContactName() + "," + feed.getStreet() + "," + feed.getLongitude() + "," + feed.getCapacityMax()
-                    + "," + feed.getLatitude() + "," + feed.getAbbreviation() + "," + feed.getContactMail() + "," + feed.getCity();
-            alltogether = alltogether + bodyString + "\n";
+            String bodyString = "" + feed.getGeoId() + "," + feed.getInternalId() + ","
+                    + feed.getId() + "," + feed.getZip() + ","
+                    + feed.getContactPhone() + "," + feed.getAppelation() + ","
+                    + feed.getContactName() + "," + feed.getStreet() + ","
+                    + feed.getLongitude() + "," + feed.getCapacityMax()
+                    + "," + feed.getLatitude() + "," + feed.getAbbreviation()
+                    + "," + feed.getContactMail() + "," + feed.getCity();
+            alltogether = alltogether + bodyString + System.lineSeparator();
         }
+        //give back the buildup String
         return alltogether;
     }
 
