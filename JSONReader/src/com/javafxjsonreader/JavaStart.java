@@ -30,7 +30,7 @@ public class JavaStart extends Application {
 
         //adding look of the window
         stage.setTitle("Park & Ride JSON Reader");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("resources/icon.png")));
         stage.setResizable(true);
 
         //show the window

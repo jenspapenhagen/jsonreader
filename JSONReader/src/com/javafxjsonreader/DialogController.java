@@ -9,9 +9,8 @@ import com.google.gson.Gson;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -140,6 +139,7 @@ public class DialogController implements Initializable {
         dateE.setValue(LocalDate.now(zone1));
         timeA.setValue(LocalTime.now().minusHours(1));
         timeE.setValue(LocalTime.now(zone1));
+
 
     }
 

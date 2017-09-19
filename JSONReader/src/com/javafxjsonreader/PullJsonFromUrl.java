@@ -8,7 +8,6 @@ package com.javafxjsonreader;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -29,7 +28,7 @@ public final class PullJsonFromUrl {
 
     private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(PullJsonFromUrl.class);
     private static String singelparkinglotfile = "./src/com/javafxjsonreader/resources/singelparkinglot.txt";
-    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt"
+    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt";
 
     public static TableColumn<Integer, Number> intColumn;
     public static TableColumn<Integer, String> appelationColumn;
@@ -141,8 +140,7 @@ public final class PullJsonFromUrl {
      */
     private static void writeToOverviewFile(String input) {
         try {
-
-            FileHandler.cleanFile(path);
+            FileHandler.cleanFile(overviewfile);
             FileHandler.writeToFile(input, overviewfile);
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());
@@ -157,7 +155,7 @@ public final class PullJsonFromUrl {
      */
     private static void writeToSingelParklotFile(String input) {
         try {
-            FileHandler.cleanFile(path);
+            FileHandler.cleanFile(singelparkinglotfile);
             FileHandler.writeToFile(input, singelparkinglotfile);
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());

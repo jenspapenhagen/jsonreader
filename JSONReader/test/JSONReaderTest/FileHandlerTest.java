@@ -9,10 +9,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 import com.javafxjsonreader.FileHandler;
-import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.junit.Before;
 
 /**
  *
@@ -24,22 +22,30 @@ public class FileHandlerTest {
     private static String fileName = "./test/JSONReaderTest/testfile.txt";
     private static String testString = "123456";
 
+    @Before
+    public void fillTheFile() throws IOException{
+        LOG.info("File: " + testString + " is new written.");
+        FileHandler.writeToFile(testString, fileName);
+    }
+    
     @Test
     public void testFileRead() {
         String output = FileHandler.readFile(fileName);
 
-        assertThat(output).isNotBlank().as("The file is not Blank");
-        assertThat(output).isEqualTo(testString).as("checking the return String of the file is the same as the testString");
+        assertThat(output).as("The file is not Blank").isNotEmpty();
+        assertThat(output).isEqualToIgnoringWhitespace(testString).as("checking the return String of the file is the same as the testString");
     }
 
     @Test
     public void testCleanFile() {
         try {
             FileHandler.cleanFile(fileName);
+             
         } catch (IOException ex) {
-            Logger.getLogger(FileHandlerTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error(ex.getMessage());
         }
-        assertThat(fileName).isBlank().as("The file is Blank");
+        String output = FileHandler.readFile(fileName);
+        assertThat(output).as("The file is Blank").isEmpty();
     }
 
     @Test
@@ -48,8 +54,8 @@ public class FileHandlerTest {
         FileHandler.writeToFile(testString, fileName);
 
         String output = FileHandler.readFile(fileName);
-        assertThat(output).isNotBlank().as("The file is not Blank");
-        assertThat(output).isEqualTo(testString).as("checking the return String of the file is the same as the testString");
+        assertThat(output).as("The file is not Blank").isNotEmpty();
+        assertThat(output).isEqualToIgnoringWhitespace(testString).as("checking the return String of the file is the same as the testString");
 
     }
 
