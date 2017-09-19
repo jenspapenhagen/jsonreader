@@ -30,6 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.slf4j.LoggerFactory;
 
 /**
  * FXML Controller class
@@ -37,7 +38,9 @@ import javafx.stage.StageStyle;
  * @author jens.papenhagen
  */
 public class LayoutController implements Initializable {
-    
+
+    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(LayoutController.class);
+
     public List<Feed> newJSON;
 
     @FXML
@@ -70,21 +73,20 @@ public class LayoutController implements Initializable {
     private TableColumn<Feed, String> contactPhone;
     @FXML
     private TableColumn<Feed, String> contactMail;
-
     @FXML
     private AnchorPane AnchorPane;
 
     @FXML
     private void handleUpdateButtonAction(ActionEvent event) throws InterruptedException, Exception {
-        System.out.println("UpdateButtonPressed");
+        LOG.info("UpdateButtonPressed");
         boolean online = true;
-        starter(online);
+        fillUIformJSON(online);
     }
 
     @FXML
     private void handleSaveAsCSVButtonAction(ActionEvent event) throws InterruptedException, Exception {
         boolean online = false;
-        System.out.println("SaveAsCSVButtonPressed");
+        LOG.info("SaveAsCSVButtonPressed");
         FileChooser fileChooser = new FileChooser();
 
         //Set extension filter
@@ -105,14 +107,14 @@ public class LayoutController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            starter(false);
+            fillUIformJSON(false);
         } catch (Exception ex) {
             Logger.getLogger(LayoutController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public void starter(boolean online) throws Exception {
+    public void fillUIformJSON(boolean online) throws Exception {
         //get the new Feed
         ObservableList<Feed> liste = convertFeed(getFeed(online));
 
@@ -135,29 +137,38 @@ public class LayoutController implements Initializable {
         table.setItems(liste);
 
         table.setOnMouseClicked(event -> {
+            //ount the click an only handl doubleclicks
             if (event.getClickCount() == 2) {
+                //get the selectet status
                 Feed stat = (Feed) table.getSelectionModel().getSelectedItem();
 
+                //check if the InternalId is set
                 if (stat.getInternalId() != null) {
                     try {
+                        //load the layout from the fxml file
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DialogLayout.fxml"));
-                        Parent root1 = (Parent) fxmlLoader.load();
+
+                        //getting the InternalId form the main window
                         //https://stackoverflow.com/questions/14370183/passing-parameters-to-a-controller-when-loading-an-fxml
+                        Parent root1 = (Parent) fxmlLoader.load();
+
                         DialogController controller = fxmlLoader.<DialogController>getController();
+                        //set the InternalId form the main window to this child window
                         controller.setInID(stat.getInternalId());
                         
+                        //adding look of the window
                         Stage stage = new Stage();
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.initStyle(StageStyle.DECORATED);
-                        stage.setResizable(false);
                         stage.setTitle("Park & Ride Parkhaus Checker: " + stat.getInternalId());
                         stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
-
+                        stage.setResizable(true);
+                        
+                        //show the window
                         stage.setScene(new Scene(root1));
                         stage.show();
-                                     
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (IOException ex) {
+                        LOG.error("FXMLLoader have an IOException" + ex.toString());
                     }
 
                 }

@@ -6,7 +6,7 @@
 package com.javafxjsonreader;
 
 /**
- *
+ * POJO of the Stastus
  * @author jens.papenhagen
  */
 public class Status {

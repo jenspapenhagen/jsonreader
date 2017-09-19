@@ -33,6 +33,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FXML Controller class
@@ -40,6 +42,8 @@ import javafx.stage.Stage;
  * @author jens.papenhagen
  */
 public class DialogController implements Initializable {
+
+    private final static Logger LOG = LoggerFactory.getLogger(DialogController.class);
 
     public List<Status> newJSON;
 
@@ -57,7 +61,6 @@ public class DialogController implements Initializable {
     private TableColumn<Status, Integer> freeSlots;
     @FXML
     private TableColumn<Status, Integer> reservedSlots;
-
     @FXML
     private JFXDatePicker dateA;
     @FXML
@@ -68,23 +71,23 @@ public class DialogController implements Initializable {
     private JFXTimePicker timeE;
     @FXML
     private TextField parkhausid;
-
     @FXML
     private AnchorPane AnchorPane;
 
     @FXML
     private void handleUpdateButtonAction(ActionEvent event) throws InterruptedException, Exception {
-        System.out.println("UpdateButtonPressed");
+        LOG.info("UpdateButtonPressed");
 
-        String newURL = newURl();
-        System.out.println("" + newURL);
-        starter(newURL);
+        String newURL = newURL();
+        LOG.info("This URL " + newURL);
+        fillUIformJSON();
     }
 
     @FXML
     private void handleSaveButtonAction(ActionEvent event) throws InterruptedException, Exception {
-        String newURl = newURl();
-        System.out.println("SaveButtonPressed");
+        LOG.info("SaveButtonPressed");
+        String newURl = newURL();
+
         FileChooser fileChooser = new FileChooser();
 
         //Set extension filter
@@ -97,7 +100,7 @@ public class DialogController implements Initializable {
         //Show save file dialog
         File file = fileChooser.showSaveDialog(stage);
         Gson gson = new Gson();
-        Object output = gson.toJson(getFeed(newURl));
+        Object output = gson.toJson(newURl);
 
         if (file != null) {
             SaveFile(output.toString(), file);
@@ -106,7 +109,7 @@ public class DialogController implements Initializable {
 
     @FXML
     private void handleSaveAsCSVButtonAction(ActionEvent event) throws InterruptedException, Exception {
-        System.out.println("SaveAsCSVButtonPressed");
+        LOG.info("SaveAsCSVButtonPressed");
         FileChooser fileChooser = new FileChooser();
 
         //Set extension filter
@@ -120,7 +123,7 @@ public class DialogController implements Initializable {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-            SaveFile(convertToCSVString(), file);
+            SaveFile(buildingUpCSVString(), file);
         }
     }
 
@@ -130,20 +133,31 @@ public class DialogController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //set the timezone to Berlin Europa
         ZoneId zone1 = ZoneId.of("Europe/Berlin");
         dateA.setValue(LocalDate.now(zone1));
         dateE.setValue(LocalDate.now(zone1));
         timeA.setValue(LocalTime.now());
         timeE.setValue(LocalTime.now(zone1));
+
     }
 
-    public void starter(String URL) throws Exception {
-        if (URL.isEmpty() | URL == null) {
-            URL = "http://report.pundr.hamburg/rest/carpark/data/1122145/2017-08-25T05:00_2017-08-25T05:50";
-        }
+    /**
+     * tansfer the data form the JSON file to the UI
+     * @return
+     * @throws Exception 
+     */
+    public List<Status> fillUIformJSON() throws Exception {
+        //make a statuslist
+        List<Status> statusliste = null;
+        //give the URL
+        PullJsonFromUrl pullJsonFromUrl = new PullJsonFromUrl(newURL());
+        String jsonFileAsString = pullJsonFromUrl.PullFromNewUrl(newURL());
+        statusliste = pullJsonFromUrl.parseLocalStatusJsonFromFile(jsonFileAsString);
 
-        ObservableList<Status> liste = convertFeed(getFeed(URL));
-
+        //built the ObservableList for the UI
+        ObservableList<Status> liste = convertFeed(statusliste);
+        //fill the list from the JSON File
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         internalCarparkId.setCellValueFactory(new PropertyValueFactory<>("internalCarparkId"));
         stamp.setCellValueFactory(new PropertyValueFactory<>("stamp"));
@@ -151,82 +165,122 @@ public class DialogController implements Initializable {
         freeSlots.setCellValueFactory(new PropertyValueFactory<>("freeSlots"));
         reservedSlots.setCellValueFactory(new PropertyValueFactory<>("reservedSlots"));
 
+        //move this ObservableList into the TableView
         table.setItems(liste);
+
+        //giveback the Statuslist
+        return (List<Status>) statusliste;
+
     }
 
-    private String newURl() {
-
-        //Handle User Input
+    /**
+     * take the infos form the UI to buildup a URL
+     *
+     * @return
+     */
+    private String newURL() {
+        //handle User Input with an error message
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Fehler im Datum ");
         alert.setHeaderText("Probleme beim Datum");
 
+        //the date in the timerange have to be form A to E 
         if (dateA.getValue().isAfter(dateE.getValue())) {
             alert.setContentText("Anfangs Datum ist kleiner als das Enddatum");
-            //get the main Windows
+
+            //get the main Windows for Postion and Style
             Stage stage = (Stage) AnchorPane.getScene().getWindow();
+
             alert.initOwner(stage);
             alert.initStyle(stage.getStyle());
+
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                dateA.setValue(LocalDate.now().minusDays(1)); //set dateA a to yesterday
-                dateE.setValue(LocalDate.now()); // set dateE to today
+                //force set the dateA to yesterday and  dateE to today
+                dateA.setValue(LocalDate.now().minusDays(1));
+                dateE.setValue(LocalDate.now());
             }
         }
 
+        //the dates are on the same date but the start time have to be after the end time
         if (dateA.getValue().isEqual(dateE.getValue()) && timeA.getValue().isAfter(timeE.getValue())) {
+            //change error message
             alert.setContentText("Anfangs Zeit liegt nich vor der Endzeit");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                timeA.setValue(timeE.getValue());
+                //force set the start time one hour behind now and the enddate to now, to give back some working timerange
+                timeA.setValue(LocalTime.now().minusHours(1));
+                timeE.setValue(LocalTime.now());
             }
         }
 
-        String newURL = "http://report.pundr.hamburg/rest/carpark/data/" + parkhausid.getText() + "/" + dateA.getValue() + "T" + timeA.getValue() + "_" + dateE.getValue() + "T" + timeE.getValue();
-        return newURL;
+        return buildURLString();
     }
 
-    public List<Status> getFeed(String newURL) throws Exception {
-        if (newURL.isEmpty() | newURL == null) {
-            newURL = "http://report.pundr.hamburg/rest/carpark/data/1122145/2017-08-25T05:00_2017-08-25T05:50";
-        }
+    /**
+     * buildingup the URL as String
+     *
+     * @return
+     */
+    private String buildURLString() {
+        //building the URL in a String
+        String URL = "http://report.pundr.hamburg/rest/carpark/data/" + parkhausid.getText() + "/" + dateA.getValue() + "T" + timeA.getValue() + "_" + dateE.getValue() + "T" + timeE.getValue();
 
-        List<Status> liste = null;
-        PullJsonFromUrl pullJsonFromUrl = new PullJsonFromUrl(newURL);
-
-        String jsonFileAsString = pullJsonFromUrl.PullFromNewUrl(newURL);
-        liste = pullJsonFromUrl.parseLocalStatusJsonFromFile(jsonFileAsString);
-
-        return (List<Status>) liste;
+        return URL;
     }
 
+    /**
+     * Convert a List of Status into an ObservableList
+     *
+     * @param liste
+     * @return ObservableList
+     */
     private ObservableList<Status> convertFeed(List<Status> liste) {
         ObservableList<Status> output = FXCollections.observableArrayList();
         output.addAll(liste);
 
         return output;
-
     }
 
+    /**
+     * Save a String into a singel File
+     *
+     * @param input
+     * @param fileName
+     * @throws IOException
+     */
     public void SaveFile(String input, File fileName) throws IOException {
+        //using the FileWriter to make a new file or handle 
         try (FileWriter fileWriter = new FileWriter(fileName, true)) {
             fileWriter.write(input);
+            //adding a break after the String
             fileWriter.write(System.lineSeparator());
             fileWriter.close();
+        } catch (IOException ex) {
+            LOG.error("FileWriter have an IOException" + ex.toString());
         }
     }
 
-    public String convertToCSVString() throws Exception {
-        String newURl = newURl();
-
+    /**
+     * building the a CSV ( Comma-separated values file)
+     *
+     * @return the new build String
+     * @throws Exception
+     */
+    public String buildingUpCSVString() throws Exception {
+        //empty string
         String alltogether = "";
+        //the header of the CSV file
         String headerString = "id,internalCarparkId,stamp,maxSlots,freeSlots";
-        alltogether = alltogether + headerString + "\n";
-        for (Status stat : getFeed(newURl)) {
+        //adding the header on top
+        alltogether = alltogether + headerString + System.lineSeparator();
+        //for every Status build a new line in the CSV and ending with a break
+        for (Status stat : fillUIformJSON()) {
             String bodyString = "" + stat.getId() + "," + stat.getInternalCarparkId() + "," + stat.getStamp() + "," + stat.getMaxSlots() + "," + stat.getFreeSlots();
-            alltogether = alltogether + bodyString + "\n";
+            alltogether = alltogether + bodyString + System.lineSeparator();
         }
 
+        //give back the uildup String
         return alltogether;
     }
 

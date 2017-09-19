@@ -82,7 +82,7 @@
                         <TableColumn fx:id="stamp" prefWidth="100.0" text="Datum" />
                         <TableColumn fx:id="maxSlots" prefWidth="121.0" text="max Freie Plätze" />
                         <TableColumn fx:id="freeSlots" prefWidth="87.0" text="Freie Plätze" />
-                  <TableColumn fx:id="reservedSlots" prefWidth="106.0" text="Belegte Plätze" />
+                        <TableColumn fx:id="reservedSlots" prefWidth="106.0" text="Belegte Plätze" />
                     </columns>
                     <VBox.margin>
                         <Insets />
@@ -95,11 +95,12 @@
                     <children>
                         <Region prefHeight="200.0" prefWidth="25.0" />
                         <Button id="saveButton" fx:id="saveJSONButton" mnemonicParsing="false" onAction="#handleSaveButtonAction" prefHeight="25.0" prefWidth="125.0" styleClass="updateButton" text="Save as JSON File">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets></Button>
-                  <Region prefHeight="200.0" prefWidth="25.0" />
-                  <Button id="saveButton" fx:id="saveCSVButton" mnemonicParsing="false" onAction="#handleSaveAsCSVButtonAction" prefHeight="25.0" prefWidth="125.0" styleClass="updateButton" text="Save as CSV File" />
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </Button>
+                        <Region prefHeight="200.0" prefWidth="25.0" />
+                        <Button id="saveButton" fx:id="saveCSVButton" mnemonicParsing="false" onAction="#handleSaveAsCSVButtonAction" prefHeight="25.0" prefWidth="125.0" styleClass="updateButton" text="Save as CSV File" />
                     </children>
                     <opaqueInsets>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -1,9 +1,12 @@
 package com.javafxjsonreader;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * POJO of the singel parkinglot
+ * @author jens.papenhagen
+ */
 public class Feed {
 
     @SerializedName("id")

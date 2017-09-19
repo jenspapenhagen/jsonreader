@@ -19,21 +19,23 @@ import javafx.stage.Stage;
  */
 public class JavaStart extends Application {
 
-
     @Override
     public void start(Stage stage) throws IOException {
 
+        //load the layout form the fxml file
         Parent root = FXMLLoader.load(getClass().getResource("MainLayout.fxml"));
 
+        //add this layout to the scene
         Scene scene = new Scene(root);
 
-        stage.setResizable(false);
+        //adding look of the window
         stage.setTitle("Park & Ride JSON Reader");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
+        stage.setResizable(true);
 
+        //show the window
         stage.setScene(scene);
         stage.show();
-
     }
 
     /**
