@@ -103,7 +103,7 @@ public class DialogController implements Initializable {
         Object output = gson.toJson(newURl);
 
         if (file != null) {
-             FileHandler.saveToFile(output.toString(), file);
+             FileHandler.writeToFile(output.toString(), file.getAbsolutePath());
         }
     }
 
@@ -123,7 +123,7 @@ public class DialogController implements Initializable {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-             FileHandler.saveToFile(buildingUpCSVString(), file);
+             FileHandler.writeToFile(buildingUpCSVString(), file.getAbsolutePath());
         }
     }
 

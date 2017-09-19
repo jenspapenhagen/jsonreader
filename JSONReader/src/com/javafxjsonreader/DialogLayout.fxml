@@ -90,7 +90,7 @@
                         <TableColumn fx:id="id" prefWidth="75.0" text="id" />
                         <TableColumn fx:id="internalCarparkId" prefWidth="115.0" text="internalCarparkId" />
                         <TableColumn fx:id="stamp" prefWidth="100.0" text="Datum" />
-                        <TableColumn fx:id="maxSlots" prefWidth="121.0" text="max Freie Plätze" />
+                        <TableColumn fx:id="maxSlots" prefWidth="100.0" text="max Freie Plätze" />
                         <TableColumn fx:id="freeSlots" prefWidth="87.0" text="Freie Plätze" />
                         <TableColumn fx:id="reservedSlots" prefWidth="106.0" text="Belegte Plätze" />
                     </columns>

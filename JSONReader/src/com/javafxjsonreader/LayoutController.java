@@ -100,7 +100,7 @@ public class LayoutController implements Initializable {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-            FileHandler.saveToFile(buildingUpCSVString(), file);
+            FileHandler.writeToFile(buildingUpCSVString(), file.getAbsolutePath());
         }
     }
 

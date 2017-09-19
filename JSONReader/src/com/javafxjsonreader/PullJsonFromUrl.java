@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 public final class PullJsonFromUrl {
 
     private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(PullJsonFromUrl.class);
+    private static String singelparkinglotfile = "./src/com/javafxjsonreader/resources/singelparkinglot.txt";
+    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt"
 
     public static TableColumn<Integer, Number> intColumn;
     public static TableColumn<Integer, String> appelationColumn;
@@ -65,7 +67,7 @@ public final class PullJsonFromUrl {
         writeToSingelParklotFile(DownloadedFile);
 
         //read the singelparkinglotfile and giveback as String
-        String output = FileHandler.readFile("./src/com/javafxjsonreader/singelparkinglot.txt");
+        String output = FileHandler.readFile(singelparkinglotfile);
 
         return output;
     }
@@ -84,7 +86,7 @@ public final class PullJsonFromUrl {
             writeToOverviewFile(DownloadedFile);
         }
         //read from the overview file and giveback as String
-        String output = FileHandler.readFile("./src/com/javafxjsonreader/overview.txt");
+        String output = FileHandler.readFile(overviewfile);
 
         return output;
     }
@@ -138,10 +140,10 @@ public final class PullJsonFromUrl {
      * @param input
      */
     private static void writeToOverviewFile(String input) {
-        String path = "./src/com/javafxjsonreader/overview.txt";
         try {
+
             FileHandler.cleanFile(path);
-            FileHandler.writeToFile(input, path);
+            FileHandler.writeToFile(input, overviewfile);
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());
         }
@@ -154,10 +156,9 @@ public final class PullJsonFromUrl {
      * @param input
      */
     private static void writeToSingelParklotFile(String input) {
-        String path = "./src/com/javafxjsonreader/singelparkinglot.txt";
         try {
             FileHandler.cleanFile(path);
-            FileHandler.writeToFile(input, path);
+            FileHandler.writeToFile(input, singelparkinglotfile);
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());
         }
