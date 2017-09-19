@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- *
+ * start the Application
  * @author jens.papenhagen
  */
 public class JavaStart extends Application {
@@ -23,7 +23,7 @@ public class JavaStart extends Application {
     public void start(Stage stage) throws IOException {
 
         //load the layout form the fxml file
-        Parent root = FXMLLoader.load(getClass().getResource("MainLayout.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
 
         //add this layout to the scene
         Scene scene = new Scene(root);

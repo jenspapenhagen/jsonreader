@@ -10,7 +10,6 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import java.io.File;
 import java.net.URL;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -36,13 +35,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FXML Controller class
+ * FXML Controller class for the singelparkinglot Dialog
  *
  * @author jens.papenhagen
  */
-public class DialogController implements Initializable {
+public class SingelParkingLotController implements Initializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(DialogController.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SingelParkingLotController.class);
 
     public List<Status> newJSON;
 

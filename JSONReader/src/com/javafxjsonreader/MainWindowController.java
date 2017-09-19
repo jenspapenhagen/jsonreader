@@ -6,7 +6,6 @@
 package com.javafxjsonreader;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -33,13 +32,13 @@ import javafx.stage.StageStyle;
 import org.slf4j.LoggerFactory;
 
 /**
- * FXML Controller class
+ * FXML Controller class for the main Window
  *
  * @author jens.papenhagen
  */
-public class LayoutController implements Initializable {
+public class MainWindowController implements Initializable {
 
-    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(LayoutController.class);
+    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(MainWindowController.class);
 
     public List<Feed> newJSON;
 
@@ -109,7 +108,7 @@ public class LayoutController implements Initializable {
         try {
             fillUIformJSON(false);
         } catch (Exception ex) {
-            Logger.getLogger(LayoutController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -146,13 +145,13 @@ public class LayoutController implements Initializable {
                 if (stat.getInternalId() != null) {
                     try {
                         //load the layout from the fxml file
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DialogLayout.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
 
                         //getting the InternalId form the main window
                         //https://stackoverflow.com/questions/14370183/passing-parameters-to-a-controller-when-loading-an-fxml
                         Parent root1 = (Parent) fxmlLoader.load();
 
-                        DialogController controller = fxmlLoader.<DialogController>getController();
+                        SingelParkingLotController controller = fxmlLoader.<SingelParkingLotController>getController();
                         //set the InternalId form the main window to this child window
                         controller.setInID(stat.getInternalId());
 

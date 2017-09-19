@@ -8,6 +8,7 @@ package com.javafxjsonreader;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -33,7 +34,7 @@ public final class PullJsonFromUrl {
     private static String singelparkinglotfile = "resources/singelparkinglot.txt";
     private static String overviewfile = "resources/overview.txt";
 
-    private ClassLoader classLoader = getClass().getClassLoader();
+    private final ClassLoader classLoader;
     
     public static TableColumn<Integer, Number> intColumn;
     public static TableColumn<Integer, String> appelationColumn;
@@ -41,13 +42,16 @@ public final class PullJsonFromUrl {
     public static List<Integer> maxCapactiyList = Arrays.asList();
 
     PullJsonFromUrl() throws Exception {
+        this.classLoader = getClass().getClassLoader();
     }
 
     PullJsonFromUrl(String newURL) throws Exception {
+        this.classLoader = getClass().getClassLoader();
         pullFromNewUrl(newURL);
     }
 
     PullJsonFromUrl(boolean online) throws Exception {
+        this.classLoader = getClass().getClassLoader();
         pullOverview(online);
     }
 
@@ -72,7 +76,7 @@ public final class PullJsonFromUrl {
 
         //read the singelparkinglotfile and giveback as String
         
-        String output = FileHandler.readFile(classLoader.getResource(singelparkinglotfile).getFile());
+        String output = FileHandler.readFile(new File(classLoader.getResource(singelparkinglotfile).getFile()));
 
         return output;
     }
@@ -91,7 +95,7 @@ public final class PullJsonFromUrl {
             writeToOverviewFile(DownloadedFile);
         }
         //read from the overview file and giveback as String        
-        String output = FileHandler.readFile(classLoader.getResource(overviewfile).getFile());
+        String output = FileHandler.readFile(new File(classLoader.getResource(overviewfile).getFile()));
 
         return output;
     }
