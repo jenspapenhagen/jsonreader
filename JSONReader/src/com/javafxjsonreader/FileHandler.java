@@ -5,16 +5,19 @@
  */
 package com.javafxjsonreader;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
 
 /**
  * Handle Files (read/write/clean)
+ *
  * @author jens.papenhagen
  */
 public class FileHandler {
@@ -27,15 +30,17 @@ public class FileHandler {
      * @param fileName
      * @return
      */
-    public static String readFile(File fileName) {
-        String content = null;
+    public static String readFile(String fileName) {
+        String everything = "";
         try {
-            content = new String(Files.readAllBytes(fileName.toPath()));
+           everything = new String(Files.readAllBytes(Paths.get(fileName)));
         } catch (IOException ex) {
             LOG.error("read File all Bytes give a IOException" + ex.getMessage());
+        } finally {
+            LOG.info("File get read");
         }
 
-        return content;
+        return everything;
     }
 
     /**
@@ -82,6 +87,5 @@ public class FileHandler {
         }
 
     }
-
 
 }

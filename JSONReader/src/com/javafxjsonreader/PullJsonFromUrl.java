@@ -8,7 +8,6 @@ package com.javafxjsonreader;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -28,13 +27,11 @@ import org.slf4j.LoggerFactory;
 public final class PullJsonFromUrl {
 
     private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(PullJsonFromUrl.class);
-//    private static String singelparkinglotfile = "./src/com/javafxjsonreader/resources/singelparkinglot.txt";
-//    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt";
 
     private static String singelparkinglotfile = "resources/singelparkinglot.txt";
     private static String overviewfile = "resources/overview.txt";
 
-    private final ClassLoader classLoader;
+    private final ClassLoader classLoader = getClass().getClassLoader();
     
     public static TableColumn<Integer, Number> intColumn;
     public static TableColumn<Integer, String> appelationColumn;
@@ -42,16 +39,13 @@ public final class PullJsonFromUrl {
     public static List<Integer> maxCapactiyList = Arrays.asList();
 
     PullJsonFromUrl() throws Exception {
-        this.classLoader = getClass().getClassLoader();
     }
 
     PullJsonFromUrl(String newURL) throws Exception {
-        this.classLoader = getClass().getClassLoader();
-        pullFromNewUrl(newURL);
+         pullFromNewUrl(newURL);
     }
 
     PullJsonFromUrl(boolean online) throws Exception {
-        this.classLoader = getClass().getClassLoader();
         pullOverview(online);
     }
 
@@ -74,9 +68,8 @@ public final class PullJsonFromUrl {
         //write to file
         writeToSingelParklotFile(DownloadedFile);
 
-        //read the singelparkinglotfile and giveback as String
-        
-        String output = FileHandler.readFile(new File(classLoader.getResource(singelparkinglotfile).getFile()));
+        //read the singelparkinglotfile and giveback as String        
+        String output = FileHandler.readFile(singelparkinglotfile);
 
         return output;
     }
@@ -95,7 +88,7 @@ public final class PullJsonFromUrl {
             writeToOverviewFile(DownloadedFile);
         }
         //read from the overview file and giveback as String        
-        String output = FileHandler.readFile(new File(classLoader.getResource(overviewfile).getFile()));
+        String output = FileHandler.readFile(overviewfile);
 
         return output;
     }
@@ -166,7 +159,7 @@ public final class PullJsonFromUrl {
      */
     private void writeToSingelParklotFile(String input) {
         try {
-            FileHandler.cleanFile(classLoader.getResource(singelparkinglotfile).getFile());
+            FileHandler.cleanFile(classLoader.getResource(singelparkinglotfile).getFile() );
             FileHandler.writeToFile(input, classLoader.getResource(singelparkinglotfile).getFile());
         } catch (IOException ex) {
             LOG.error("FileHandler give a IOException " + ex.getMessage());

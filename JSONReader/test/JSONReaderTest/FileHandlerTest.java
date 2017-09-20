@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 import com.javafxjsonreader.FileHandler;
+import java.io.File;
 import java.io.IOException;
 import org.junit.Before;
 
