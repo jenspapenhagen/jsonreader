@@ -28,8 +28,8 @@ public final class PullJsonFromUrl {
 
     private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(PullJsonFromUrl.class);
 
-    private static String singelparkinglotfile = "resources/singelparkinglot.txt";
-    private static String overviewfile = "resources/overview.txt";
+    private static String singelparkinglotfile = "./src/com/javafxjsonreader/resources/singelparkinglot.txt";
+    private static String overviewfile = "./src/com/javafxjsonreader/resources/overview.txt";
 
     private final ClassLoader classLoader = getClass().getClassLoader();
     

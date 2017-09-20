@@ -5,14 +5,11 @@
  */
 package com.javafxjsonreader;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -35,7 +32,7 @@ public class FileHandler {
         try {
            everything = new String(Files.readAllBytes(Paths.get(fileName)));
         } catch (IOException ex) {
-            LOG.error("read File all Bytes give a IOException" + ex.getMessage());
+            LOG.error("read File all Bytes give a IOException " + ex.getMessage() + " " + ex.getLocalizedMessage() + " " + ex.getStackTrace());
         } finally {
             LOG.info("File get read");
         }
