@@ -44,9 +44,8 @@ public class FileHandler {
      * cleanFile open the file an remove all content than the file is 100% empty
      *
      * @param filename
-     * @throws IOException
      */
-    public static void cleanFile(String filename) throws IOException {
+    public static void cleanFile(String filename) {
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
         try {
@@ -57,8 +56,13 @@ public class FileHandler {
         } catch (IOException ex) {
             LOG.error("FileWriter give a IOException " + ex.getMessage());
         } finally {
-            bufferedWriter.close();
-            fileWriter.close();
+            try {
+                bufferedWriter.close();
+                fileWriter.close();
+            } catch (IOException ex) {
+                LOG.error("FileWriter give a IOException on close " + ex.getMessage());
+            }
+            
         }
     }
 
@@ -67,9 +71,8 @@ public class FileHandler {
      *
      * @param input
      * @param fileName
-     * @throws IOException
      */
-    public static void writeToFile(String input, String fileName) throws IOException {
+    public static void writeToFile(String input, String fileName) {
         //using the FileWriter to make a new file or handle
         FileWriter fileWriter = null;
         try {
@@ -78,9 +81,13 @@ public class FileHandler {
             //adding a break after the String
             fileWriter.write(System.lineSeparator());
         } catch (IOException ex) {
-            LOG.error("FileWriter have an IOException" + ex.toString());
+            
         } finally {
-            fileWriter.close();
+            try {
+                fileWriter.close();
+            } catch (IOException ex) {
+                LOG.error("FileWriter have an IOException on close" + ex.toString());
+            }
         }
 
     }

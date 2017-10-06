@@ -143,13 +143,13 @@ public class MainWindowController implements Initializable {
 
                 //check if the InternalId is set
                 if (stat.getInternalId() != null) {
+                    LOG.info("InternalID is: " + stat.getInternalId());
                     try {
                         //load the layout from the fxml file
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SingelParkingLot.fxml"));
 
                         //getting the InternalId form the main window
-                        //https://stackoverflow.com/questions/14370183/passing-parameters-to-a-controller-when-loading-an-fxml
-                        Parent root1 = (Parent) fxmlLoader.load();
+                        Parent root = (Parent)fxmlLoader.load();
 
                         SingelParkingLotController controller = fxmlLoader.<SingelParkingLotController>getController();
                         //set the InternalId form the main window to this child window
@@ -164,7 +164,8 @@ public class MainWindowController implements Initializable {
                         stage.setResizable(true);
 
                         //show the window
-                        stage.setScene(new Scene(root1));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
                         stage.show();
                     } catch (IOException ex) {
                         LOG.error("FXMLLoader have an IOException" + ex.toString());
