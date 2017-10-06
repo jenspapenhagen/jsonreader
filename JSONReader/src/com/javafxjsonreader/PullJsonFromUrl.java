@@ -143,13 +143,9 @@ public final class PullJsonFromUrl {
      * @param input
      */
     private void writeToOverviewFile(String input) {
-        try {
+
             FileHandler.cleanFile(classLoader.getResource(overviewfile).getFile());
             FileHandler.writeToFile(input, classLoader.getResource(overviewfile).getFile());
-        } catch (IOException ex) {
-            LOG.error("FileHandler give a IOException " + ex.getMessage());
-        }
-
     }
 
     /**
@@ -158,13 +154,8 @@ public final class PullJsonFromUrl {
      * @param input
      */
     private void writeToSingelParklotFile(String input) {
-        try {
             FileHandler.cleanFile(classLoader.getResource(singelparkinglotfile).getFile() );
             FileHandler.writeToFile(input, classLoader.getResource(singelparkinglotfile).getFile());
-        } catch (IOException ex) {
-            LOG.error("FileHandler give a IOException " + ex.getMessage());
-        }
-
     }
 
     /**
